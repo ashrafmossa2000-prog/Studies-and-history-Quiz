@@ -304,6 +304,7 @@ body {
     font-weight: bold;
     font-size: 1.1em;
 }
+
 /* ====== أزرار النتيجة ====== */
 .btn-send {
     padding: 14px 40px;
@@ -337,25 +338,6 @@ body {
 .btn-copy:hover {
     transform: translateY(-2px);
     box-shadow: 0 10px 30px rgba(23, 162, 184, 0.4);
-}
-
-/* ====== زر عرض الامتحان ====== */
-.btn-paper {
-    padding: 14px 40px;
-    background: linear-gradient(135deg, #fd7e14 0%, #dc3545 100%);
-    color: white;
-    border: none;
-    border-radius: 10px;
-    font-size: 18px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s;
-    width: 100%;
-}
-
-.btn-paper:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 30px rgba(253, 126, 20, 0.4);
 }
 
 /* ====== زر عرض الامتحان ====== */
@@ -442,6 +424,7 @@ body {
     font-size: 14px;
     margin: 3px 0;
 }
+
 /* ====== زر PDF الجنب ====== */
 .btn-print-pdf {
     padding: 15px 20px;
@@ -458,4 +441,98 @@ body {
 .btn-print-pdf:hover {
     transform: translateY(-2px);
     box-shadow: 0 10px 30px rgba(108, 117, 125, 0.4);
+}
+
+/* ============================================================ */
+/* ====== تنسيق أرقام الهواتف (دعاية) ====== */
+/* ============================================================ */
+
+.phone-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 10px 20px;
+    margin-top: 8px;
+}
+
+.phone-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: #f0f4ff;
+    padding: 5px 16px 5px 18px;
+    border-radius: 30px;
+    border: 1px solid #b8cff0;
+    font-size: 15px;
+    font-weight: 500;
+    color: #00337a;
+    direction: ltr;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.phone-item i {
+    font-size: 17px;
+    color: #0077b6;
+    margin-left: 3px;
+}
+
+.phone-item .num {
+    direction: ltr;
+    unicode-bidi: embed;
+    font-weight: 600;
+    color: #0a2647;
+    letter-spacing: 0.3px;
+}
+
+/* تنسيق إضافي لشاشة الدخول */
+.login-phone {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px dashed #c5d6ec;
+}
+
+/* تنسيق إضافي لشاشة البداية */
+.start-phone {
+    margin-top: 6px;
+}
+
+/* ============================================================ */
+/* ✅ جديد: زر مراجعة الأخطاء */
+/* ============================================================ */
+.btn-review {
+    padding: 14px 40px;
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-review:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(220, 53, 69, 0.4);
+}
+
+/* ============================================================ */
+/* ✅ جديد: زر إرسال الأخطاء عبر واتساب */
+/* ============================================================ */
+.btn-send-wrong {
+    padding: 14px 40px;
+    background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-send-wrong:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(37, 211, 102, 0.4);
 }

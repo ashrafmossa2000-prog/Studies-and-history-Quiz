@@ -1,12 +1,30 @@
 /* ===== نظام الدخول والحماية ===== */
 
-// قائمة الأكواد المسموح بها (غيرها بأكوادك الخاصة)
 const validCodes = {
+    "AAA001": "اشرف موسى",
     "AAA002": "ايه اشرف",
     "AAA003": "اياد اشرف",
     "AAA004": "اروى اشرف",
+    "AAA006": "سلمى عمرو",
+    "AAA007": "بتول محمد",
     "AAA005": "الاء اشرف",
-    "AAA001": "اشرف موسى"
+    "AAA008": "رنا محمد",
+    "AAA010": "فاطمة حسن",
+    "AAA011": "عمر خالد",
+    "AAA012": "زينب عبدالله",
+    "AAA013": "خديجة رجب",
+    "AAA014": "محمد سعيد",
+    "AAA015": "نورا إبراهيم",
+    "AAA016": "علياء مصطفى",
+    "AAA017": "حسن يوسف",
+    "AAA018": "منى سامي",
+    "AAA019": "كريم طارق",
+    "AAA020": "ليلى عمرو",
+    "AAA021": "محمود فتحي",
+    "AAA022": "سارة حسين",
+    "AAA023": "إسلام شعبان",
+    "AAA024": "هدى سليمان",
+    "AAA025": "أحمد رضا"
 };
 
 // عناصر شاشة الدخول
@@ -22,20 +40,15 @@ loginBtn.addEventListener('click', function() {
     const name = loginStudentName.value.trim();
     const code = loginCode.value.trim().toUpperCase();
 
-    // التحقق من الاسم والكود
     if (validCodes[code] && validCodes[code] === name) {
-        // الدخول صحيح
         loginError.style.display = 'none';
         loginScreen.style.display = 'none';
-        startScreen.style.display = 'flex'; // إظهار شاشة البداية
-        
-        // وضع اسم الطالب في الترحيب وفي شاشة النتيجة
+        startScreen.style.display = 'flex';
         document.getElementById('welcomeName').textContent = name;
         document.getElementById('studentName').value = name;
         document.getElementById('studentLabel').textContent = name;
         document.getElementById('resultName').textContent = name;
     } else {
-        // خطأ في الدخول
         loginError.style.display = 'block';
         loginError.textContent = "❌ كود الدخول أو الاسم غير صحيح، حاول مرة أخرى.";
     }
@@ -45,13 +58,13 @@ loginBtn.addEventListener('click', function() {
    (من هنا يبدأ الكود القديم الخاص بك script.js)
    ============================================= */
 
-
 // ====== المتغيرات العامة ======
 let currentQuestions = [];
 let currentIndex = 0;
 let score = 0;
 let studentName = '';
 let totalQuestions = 0;
+let wrongQuestions = [];  // ✅ جديد: مصفوفة لتخزين الأسئلة التي أخطأ فيها الطالب
 
 // ============================================================
 // دالة الحصول على معلومات الوحدة والدرس
@@ -130,7 +143,58 @@ function sendAnswers() {
 ${new Date().toLocaleString('ar-EG')}
 
 👨‍🏫 إعداد:
-المهندس / أشرف موسى`;
+المهندس / أشرف موسى
+
+📞 للتواصل:
+01110547129 - 01100429783`;
+
+    const phone = '201100429783';
+    window.location.href = 'https://wa.me/' + phone + '?text=' + encodeURIComponent(message);
+}
+
+// ============================================================
+// ✅ جديد: دالة إرسال الأسئلة الخاطئة عبر واتساب
+// ============================================================
+function sendWrongQuestionsViaWhatsApp() {
+    if (wrongQuestions.length === 0) {
+        alert('🎉 لا توجد أخطاء لإرسالها! أحسنت!');
+        return;
+    }
+
+    const name = studentName || 'طالب';
+    const { gradeName, unitName, lessonName } = getUnitAndLessonInfo();
+
+    let message = `📋 تقرير الأخطاء
+
+📚 الصف: ${gradeName}
+📖 الوحدة: ${unitName}
+📝 الدرس: ${lessonName}
+👤 الاسم: ${name}
+📊 عدد الأخطاء: ${wrongQuestions.length}
+
+━━━━━━━━━━━━━━━━━━━
+
+`;
+
+    wrongQuestions.forEach((item, index) => {
+        message += `❌ سؤال ${index + 1}:\n`;
+        message += `${item.question}\n\n`;
+
+        if (item.isEssay) {
+            message += `✏️ إجابتك: ${item.studentAnswer}\n`;
+            message += `✅ الإجابة الصحيحة: ${item.correctAnswer}\n`;
+        } else {
+            message += `✏️ إجابتك (خطأ): ${item.studentAnswer}\n`;
+            message += `✅ الإجابة الصحيحة: ${item.correctAnswer}\n`;
+        }
+
+        message += `\n━━━━━━━━━━━━━━━━━━━\n\n`;
+    });
+
+    message += `🕐 التاريخ:\n${new Date().toLocaleString('ar-EG')}\n\n`;
+    message += `👨‍🏫 إعداد:\nالمهندس / أشرف موسى\n\n`;
+    message += `📞 للتواصل:\n01110547129 - 01100429783`;
+
     const phone = '201100429783';
     window.location.href = 'https://wa.me/' + phone + '?text=' + encodeURIComponent(message);
 }
@@ -165,7 +229,10 @@ function copyResult() {
 ${new Date().toLocaleString('ar-EG')}
 
 👨‍🏫 إعداد:
-المهندس / أشرف موسى`;
+المهندس / أشرف موسى
+
+📞 للتواصل:
+01110547129 - 01100429783`;
     if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(message).then(() => alert('✅ تم نسخ النتيجة بنجاح!')).catch(() => fallbackCopy(message));
     } else { fallbackCopy(message); }
@@ -214,9 +281,8 @@ function showExamPaper() {
 }
 
 // ============================================================
-// ✅ الدالة الجديدة: طباعة الأسئلة PDF
+// ✅ دالة طباعة الأسئلة PDF مع الهيدر والفوتر
 // ============================================================
-
 function printQuestionsAsPDF() {
     const gradeSelect = document.getElementById('gradeSelect');
     const unitSelect = document.getElementById('unitSelect');
@@ -246,9 +312,6 @@ function printQuestionsAsPDF() {
         return;
     }
 
-    // ============================================================
-    // ✅ تصنيف الأسئلة حسب النوع
-    // ============================================================
     const groupedQuestions = {
         mcq: { title: '📝 اختر الإجابة الصحيحة', questions: [] },
         truefalse: { title: '📝 صح أم خطأ', questions: [] },
@@ -274,7 +337,6 @@ function printQuestionsAsPDF() {
         }
     });
 
-    // إزالة الأقسام الفارغة
     const sections = [];
     for (const key in groupedQuestions) {
         if (groupedQuestions[key].questions.length > 0) {
@@ -287,9 +349,6 @@ function printQuestionsAsPDF() {
         return;
     }
 
-    // ============================================================
-    // ✅ بناء صفحة PDF
-    // ============================================================
     const win = window.open('', '_blank');
     win.document.write(`<html dir="rtl" lang="ar"><head><meta charset="UTF-8"><title>أسئلة للطباعة</title>
     <style>
@@ -301,7 +360,24 @@ function printQuestionsAsPDF() {
             margin: auto; 
             line-height: 2;
             background: #fff;
+            padding-bottom: 50px;
         }
+        
+        .print-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #e8ebff;
+            border-top: 2px solid #667eea;
+            text-align: center;
+            padding: 10px 0;
+            font-weight: bold;
+            color: #333;
+            font-size: 14px;
+            z-index: 1000;
+        }
+
         .header-info { 
             text-align: center; 
             margin-bottom: 20px; 
@@ -370,26 +446,21 @@ function printQuestionsAsPDF() {
             font-weight: bold;
             letter-spacing: 3px;
         }
-        .footer { 
-            text-align: center; 
-            margin-top: 30px; 
-            color: #888; 
-            border-top: 1px solid #ccc; 
-            padding-top: 15px; 
-            font-size: 0.95em;
-        }
+
         @media print { 
-            body { padding: 12px; } 
+            body { padding: 12px; padding-bottom: 50px; } 
             .question-block { page-break-inside: avoid; }
             .answer-space { border-bottom: 1px solid #000; }
             .section-title { background: #e8ebff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            
+            .print-footer {
+                position: fixed;
+                display: block;
+            }
         }
     </style>
     </head><body>`);
     
-    // ============================================================
-    // ✅ رأس الصفحة
-    // ============================================================
     win.document.write(`
         <div class="header-info">
             <h1>📝 أسئلة الاختبار</h1>
@@ -404,23 +475,14 @@ function printQuestionsAsPDF() {
         </div>
     `);
     
-    // ============================================================
-    // ✅ عرض الأسئلة مجمعة حسب النوع
-    // ============================================================
     let questionCounter = 1;
     
     sections.forEach(section => {
-        // عنوان القسم (مرة واحدة)
         win.document.write(`<div class="section-title">${section.title}</div>`);
         
         section.questions.forEach(q => {
             win.document.write(`<div class="question-block">`);
             
-            // ============================================================
-            // معالجة كل نوع
-            // ============================================================
-            
-            // 1️⃣ MCQ - اختيار من متعدد
             if (q.type === 'mcq') {
                 win.document.write(`<div class="q-text">${questionCounter}. ${q.question}</div>`);
                 if (q.options && q.options.length > 0) {
@@ -431,30 +493,20 @@ function printQuestionsAsPDF() {
                     win.document.write(`</div>`);
                 }
             }
-            
-            // 2️⃣ True/False - صح/خطأ
             else if (q.type === 'truefalse') {
                 win.document.write(`<div class="q-text">${questionCounter}. <span class="truefalse-brackets">( )</span> ${q.question}</div>`);
             }
-            
-            // 3️⃣ Concept - أكمل الفراغات
             else if (q.type === 'concept') {
                 win.document.write(`<div class="q-text">${questionCounter}. ${q.question}</div>`);
             }
-            
-            // 4️⃣ Definition - ما المقصود بـ
             else if (q.type === 'definition') {
                 win.document.write(`<div class="q-text">${questionCounter}. ${q.question}</div>`);
                 win.document.write(`<div class="answer-space"></div>`);
             }
-            
-            // 5️⃣ Explain - علّل
             else if (q.type === 'explain') {
                 win.document.write(`<div class="q-text">${questionCounter}. ${q.question}</div>`);
                 win.document.write(`<div class="answer-space"></div>`);
             }
-            
-            // 6️⃣ أي نوع تاني
             else {
                 win.document.write(`<div class="q-text">${questionCounter}. ${q.question}</div>`);
                 if (q.options && q.options.length > 0) {
@@ -473,10 +525,12 @@ function printQuestionsAsPDF() {
         });
     });
     
-    // ============================================================
-    // ✅ تذييل الصفحة
-    // ============================================================
-    win.document.write(`<div class="footer">👨‍🏫 إعداد: المهندس / أشرف موسى</div>`);
+    win.document.write(`
+        <div class="print-footer">
+            إعداد المهندس/ اشرف موسى &nbsp;&nbsp;|&nbsp;&nbsp; 📞 01110547129 - 01100429783
+        </div>
+    `);
+    
     win.document.write('</body></html>');
     win.document.close();
     win.focus();
@@ -484,7 +538,162 @@ function printQuestionsAsPDF() {
 }
 
 // ============================================================
-// ====== باقي الكود الأصلي (نفسه من غير تغيير) ======
+// ✅ دالة عرض الأسئلة الخاطئة مع الحل الصحيح
+// ============================================================
+function showWrongQuestions() {
+    if (wrongQuestions.length === 0) {
+        alert('🎉 لا توجد أخطاء! أحسنت!');
+        return;
+    }
+    
+    const win = window.open('', '_blank');
+    win.document.write(`
+        <html dir="rtl" lang="ar">
+        <head>
+            <meta charset="UTF-8">
+            <title>مراجعة الأخطاء</title>
+            <style>
+                body { 
+                    font-family: 'Segoe UI', Tahoma, sans-serif; 
+                    padding: 30px; 
+                    max-width: 900px; 
+                    margin: auto; 
+                    line-height: 1.8;
+                    background: #f8f9fa;
+                }
+                h1 { 
+                    text-align: center; 
+                    color: #dc3545; 
+                    margin-bottom: 10px;
+                }
+                .subtitle {
+                    text-align: center;
+                    color: #666;
+                    margin-bottom: 30px;
+                    font-size: 1.1em;
+                }
+                .question-card {
+                    background: white;
+                    border-radius: 15px;
+                    padding: 25px;
+                    margin-bottom: 25px;
+                    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+                    border-right: 5px solid #dc3545;
+                }
+                .question-number {
+                    display: inline-block;
+                    background: #dc3545;
+                    color: white;
+                    padding: 3px 12px;
+                    border-radius: 20px;
+                    font-weight: bold;
+                    font-size: 0.9em;
+                    margin-bottom: 10px;
+                }
+                .question-text {
+                    font-size: 1.2em;
+                    font-weight: bold;
+                    color: #333;
+                    margin-bottom: 15px;
+                }
+                .answer-box {
+                    padding: 12px 18px;
+                    border-radius: 10px;
+                    margin: 10px 0;
+                    font-size: 1.05em;
+                }
+                .wrong-answer {
+                    background: #f8d7da;
+                    border: 2px solid #dc3545;
+                    color: #721c24;
+                }
+                .correct-answer {
+                    background: #d4edda;
+                    border: 2px solid #28a745;
+                    color: #155724;
+                }
+                .label {
+                    font-weight: bold;
+                    display: block;
+                    margin-bottom: 5px;
+                }
+                .icon {
+                    font-size: 1.2em;
+                    margin-left: 5px;
+                }
+                .footer {
+                    text-align: center;
+                    color: #888;
+                    margin-top: 40px;
+                    padding-top: 20px;
+                    border-top: 2px solid #ddd;
+                    font-size: 0.95em;
+                }
+            </style>
+        </head>
+        <body>
+            <h1>📋 مراجعة الأخطاء</h1>
+            <div class="subtitle">👤 ${studentName} - عدد الأخطاء: ${wrongQuestions.length}</div>
+    `);
+    
+    wrongQuestions.forEach((item, index) => {
+        win.document.write(`
+            <div class="question-card">
+                <span class="question-number">السؤال ${index + 1}</span>
+                <div class="question-text">${item.question}</div>
+        `);
+        
+        if (item.isEssay) {
+            win.document.write(`
+                <div class="answer-box wrong-answer">
+                    <span class="label"><span class="icon">❌</span> إجابتك:</span>
+                    ${item.studentAnswer}
+                </div>
+                <div class="answer-box correct-answer">
+                    <span class="label"><span class="icon">✅</span> الإجابة الصحيحة:</span>
+                    ${item.correctAnswer}
+                </div>
+            `);
+        } else {
+            win.document.write(`
+                <div class="answer-box wrong-answer">
+                    <span class="label"><span class="icon">❌</span> إجابتك (خطأ):</span>
+                    ${item.studentAnswer}
+                </div>
+                <div class="answer-box correct-answer">
+                    <span class="label"><span class="icon">✅</span> الإجابة الصحيحة:</span>
+                    ${item.correctAnswer}
+                </div>
+            `);
+            
+            if (item.allOptions && item.allOptions.length > 0) {
+                win.document.write(`<div style="margin-top:15px;padding:10px;background:#f1f3f5;border-radius:8px;"><strong>📝 جميع الخيارات:</strong><ul style="margin-top:8px;padding-right:20px;">`);
+                item.allOptions.forEach((opt, i) => {
+                    let style = '';
+                    if (i === item.correctIndex) style = 'color:#28a745;font-weight:bold;';
+                    else if (i === item.selectedIndex) style = 'color:#dc3545;text-decoration:line-through;';
+                    win.document.write(`<li style="${style}">${opt}</li>`);
+                });
+                win.document.write(`</ul></div>`);
+            }
+        }
+        
+        win.document.write(`</div>`);
+    });
+    
+    win.document.write(`
+            <div class="footer">
+                👨‍🏫 إعداد: المهندس / أشرف موسى<br>
+                📞 01110547129 - 01100429783
+            </div>
+        </body>
+        </html>
+    `);
+    win.document.close();
+}
+
+// ============================================================
+// ====== باقي الكود الأصلي ======
 // ============================================================
 
 // ====== تحميل الوحدات عند اختيار الصف ======
@@ -540,6 +749,8 @@ document.getElementById('startBtn').addEventListener('click', function() {
     score = 0;
     totalQuestions = currentQuestions.length;
     studentName = name;
+    wrongQuestions = [];  // ✅ إعادة تعيين الأسئلة الخاطئة
+    
     document.getElementById('startScreen').style.display = 'none';
     document.getElementById('quizScreen').style.display = 'block';
     document.getElementById('resultScreen').style.display = 'none';
@@ -568,6 +779,8 @@ document.getElementById('examStartBtn').addEventListener('click', function() {
     score = 0;
     totalQuestions = currentQuestions.length;
     studentName = name;
+    wrongQuestions = [];  // ✅ إعادة تعيين الأسئلة الخاطئة
+    
     document.getElementById('startScreen').style.display = 'none';
     document.getElementById('quizScreen').style.display = 'block';
     document.getElementById('resultScreen').style.display = 'none';
@@ -631,7 +844,23 @@ function selectAnswer(selectedIndex) {
         if (index === correctIndex) { btn.classList.add('correct'); }
         else if (index === selectedIndex && index !== correctIndex) { btn.classList.add('wrong'); }
     });
-    if (selectedIndex === correctIndex) { score++; document.getElementById('liveScore').textContent = score; }
+    
+    if (selectedIndex === correctIndex) { 
+        score++; 
+        document.getElementById('liveScore').textContent = score; 
+    } else {
+        // ✅ جديد: تسجيل السؤال الخاطئ
+        wrongQuestions.push({
+            question: question.question,
+            type: question.type,
+            studentAnswer: question.options ? question.options[selectedIndex] : 'لم يجب',
+            correctAnswer: question.options ? question.options[correctIndex] : '',
+            correctIndex: correctIndex,
+            selectedIndex: selectedIndex,
+            allOptions: question.options || []
+        });
+    }
+    
     document.getElementById('nextBtn').style.display = 'block';
 }
 
@@ -701,6 +930,15 @@ function checkEssayAnswer() {
         feedback.style.background = '#f8d7da';
         feedback.style.color = '#721c24';
         feedback.innerHTML = `❌ <strong>إجابة غير صحيحة</strong><br><span style="font-size:14px;">نسبة التطابق: <strong>${Math.max(bestSimilarity, bestWordSimilarity)}%</strong><br>الحد الأدنى لقبول الإجابة: <strong>50%</strong></span><br><span style="font-size:14px;margin-top:10px;display:block;">💡 الإجابة النموذجية:</span><ul style="margin-top:5px;padding-right:20px;">${correctAnswers.map(ans => `<li style="font-size:14px;">${ans}</li>`).join('')}</ul>`;
+        
+        // ✅ جديد: تسجيل السؤال المقالي الخاطئ
+        wrongQuestions.push({
+            question: question.question,
+            type: question.type,
+            studentAnswer: userAnswer,
+            correctAnswer: correctAnswers.join(' | '),
+            isEssay: true
+        });
     }
     textarea.disabled = true;
     const checkBtn = document.querySelector('.answer-btn');
@@ -729,6 +967,20 @@ function showResult() {
     document.getElementById('resultScore').textContent = `📊 الدرجة: ${score} من ${totalQuestions}`;
     document.getElementById('resultPercent').textContent = `📈 النسبة: ${percent}%`;
     document.getElementById('resultGrade').textContent = `${emoji} ${gradeText}`;
+    
+    // ✅ جديد: إظهار/إخفاء أزرار مراجعة الأخطاء وإرسالها
+    const reviewBtn = document.getElementById('reviewMistakesBtn');
+    const sendWrongBtn = document.getElementById('sendWrongBtn');
+    
+    if (wrongQuestions.length > 0) {
+        reviewBtn.style.display = 'inline-block';
+        reviewBtn.textContent = `📋 مراجعة الأخطاء (${wrongQuestions.length})`;
+        sendWrongBtn.style.display = 'inline-block';
+        sendWrongBtn.textContent = `📱 إرسال الأخطاء عبر واتساب`;
+    } else {
+        reviewBtn.style.display = 'none';
+        sendWrongBtn.style.display = 'none';
+    }
 }
 
 // ====== إعادة الاختبار ======
@@ -741,6 +993,7 @@ document.getElementById('restartBtn').addEventListener('click', function() {
     document.getElementById('lessonSelect').innerHTML = '<option value="">-- اختر الدرس --</option>';
     document.getElementById('liveScore').textContent = '0';
     document.getElementById('progressBar').style.width = '0%';
+    wrongQuestions = [];  // ✅ إعادة تعيين
 });
 
 // ============================================================
